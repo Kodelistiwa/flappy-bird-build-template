@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flappy bird wannabe</title>
+    <style>
+        canvas {
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="288" height="512"></canvas>
+</body>
+<script>
+
+// buat variable dengan nama cvs yang mengacu pada element dengan id #canvas di html
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
+var cvs = ...;
+
+// buat variable dengan nama ctx untuk memberi konteks 2D pada canvas melalui variable cvs yang telah dibuat, kalau cek melalui MDN, contoh penulisannya adalah canvas.getContext(contextType);
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext
+// gunakan konteks ("2d")
+var ctx = cvs....;
+
+// tempatkan gambar yang telah disediakan di folder images
+var bird = new Image();
+var bg = new Image();
+var fg = new Image();
+var pipeNorth = new Image();
+var pipeSouth = new Image();
+// gunakan metode .src pada objek image untuk mengambil sumber gambar sesuai namanya
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image
+bird.src = "...";
+bg.src = "...";
+fg.src = "...";
+pipeNorth.src = "...";
+pipeSouth.src = "...";
+
+// untuk membuat konfigurasi, kamu akan membutuhkan beberapa variable untuk pengaturan
+// variable gap untuk mengatur celah di antara pipa, berikan nilai 90
+var ... = ...;
+// variable constant
+var ...;
+// variable bX untuk jarak ke tepi layar, beri nilai 10
+var ...;
+// variable bY untuk tinggi terbang awal, beri nilai 150
+...;
+// variable gravity untuk mengatur kecepatan turunnya, beri nilai 1.5
+...;
+// variable score dengan nilai default 0
+...;
+
+// beri suara supaya lebih menarik
+// beri suara sesuai dengan yang telah disediakan di folder sounds
+var fly = new Audio();
+var scor = new Audio();
+// gunakan metode .src pada objek audio untuk mengambil sumber suara sesuai namanya
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Audio
+fly.src = "...";
+scor.src = "...";
+
+// buat fungsi moveUp yang trigger setiap kali ada tombol yang ditekan, maka karakter akan naik
+// naikkan tinggi terbang dengan mengurangi nilai ordinat karakter, misal 30, dan uji codemu
+// kita akan menggunakan event on key down
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event
+function ...(){
+    ...;
+    // sedikit bunyi-bunyi
+    fly.play();
+}
+// ...keydown?...moveUp?;
+
+// atur pipe coordinates
+// buat variable pipe dengan tipe data array
+// assign nilai pertamanya sebagai objek dengan x sesuai lebar canvas dengan menggunakan properti width, dan y yang bernilai 0
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/width
+var pipe = [];
+pipe[...] = {
+    x : ...,
+    ...
+};
+
+// gunakan function draw untuk menjalankan permainan
+// dengan menggunakan konteks yang telah dibuat(ctx), kita akan menggambarkan kanvasnya dengan drawImage, di mana koordinatnya 0,0 dan background dengan gambar yang telah disediakan
+// e.g
+function draw(){
+    ctx.drawImage(bg,0,0);
+    for(var i = 0; i < pipe.length; i++){
+        // gambar pipeSouth pada kanvas dengan dimulai dari titik ordinat (x, y)
+        // e.g
+        ctx.drawImage(pipeNorth,pipe[i].x,pipe[i].y);
+        // gunakan variable constant untuk mengambil tinggi pipeNorth ditambah gap
+        // gambar pipeSouth pada kanvas dengan dimulai dari titik ordinat (x, y+contant)
+        constant = ...;
+        ctx.drawImage(...);
+
+        // pada setiap kali animasi, e.g
+        pipe[i].x--;
+        // jika pipa mendekati aksis(x) 100,
+        // maka push pipe baru dengan x di ujung canvas menggunakan acuan lebar kanvas
+        // dan y menggunakan pembulatan angka random (0sampai1) dikalikan tinggi pipeNorth yang kemudian dikurangi tinggi pipeNorth
+        // posisi y menentukan posisi awal pipeNorth
+        if( ... ){
+            pipe.push({
+                ...,
+                ...
+            });
+        }
+
+        // JIKA
+        // 
+        // tabrak pipa
+        // bX ditambah lebar karakter lebih besar atau sama dengan aksis pipe &&
+        // 
+        // bX lebih kecil atau sama dengan aksis pipe ditambah dengan lebar northPipe &&
+        // tabrak atas bawah
+        // bY lebih kecil atau sama dengan ordinat pipe ditambah dengan tinggi northPipe || bY lebih besar atau sama dengan ordinat pipe ditambah nilai constant yang dibuat
+        // 
+        // tabrak tanah
+        // atau kondisi terakhir, ordinat karakter ditambah tinggi karakter lebih besar daripada tinggi canvas dikurangi tinggi fg
+        if( bX + bird.width >= ... && ... && (... || ...) || ...){
+            // apabila salah satu kondisi di atas tercapai, brarti game harus direload
+            // location.reload(); // reload the page
+        }
+
+        // jika aksis dari pipe mencapai nilai 5, maka skor bertambah
+        if(pipe[i].x == 5){
+            ...;
+            // bunyikan tambah skor
+            scor.play();
+        }
+    }
+    // gambar ground di kanvas dengan menggunakan gambar fg yang telah disediakan, dengan koordinat (0, mulai dari tinggi kanvas dikurangi tinggi fg), ingat perhitungan drawImage adalah dari kiri atas
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/height
+    ctx.drawImage(fg,0,cvs.height - fg.height);
+    // gambar objek karakter dengan menggunakan file bird yang telah disediakan dengan posisi awal menggunakan koordinat (bX, bY)
+    ctx.drawImage(...);
+    // pada setiap animasi, posisi ordinat bertambah sesuai gravity
+    bY += gravity;
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
+    ctx.fillStyle = "#000";
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
+    ctx.font = "20px Verdana";
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText
+    ctx.fillText("Score : "+score,10,cvs.height-20);
+    requestAnimationFrame(draw);
+}
+
+draw();
+
+
+// NOTE, setiap kali load, lihat console, akan mempermudah debug dengan melihat error apa yang terjadi
+
+</script>
+</html>
